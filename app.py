@@ -2,12 +2,13 @@ import os
 import warnings
 warnings.simplefilter("ignore")
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.models import load_model
+
+from keras.preprocessing.image import img_to_array
+from keras.models import load_model
 import numpy as np
 import cv2
 from flask import Flask, request, render_template
-from tensorflow.keras import backend as K
+from keras import backend as K
 from os import listdir
 K.clear_session()
 
@@ -62,8 +63,16 @@ def upload():
             detect()
             solution = solutions(result)
         except Exception as e:
-            print(f'Error While Loading : {e}')  
-    return render_template('complete.html', name=result, accuracy=percentage , img = imageName , soln = solution)
+            print(f'Error While Loading : {e}') 
+            print(percentage)
+    response_data = {
+        "name": result,
+        "accuracy": percentage,
+        "img": imageName,
+        "soln": solution
+    }
+    print(response_data)
+    return response_data
 
 
 def detect():
